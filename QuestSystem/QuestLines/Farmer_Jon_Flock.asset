@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92a9d3aac38e1ee5a81cf36adef76e98, type: 3}
+  m_Name: Farmer_Jon_Flock
+  m_EditorClassIdentifier: Assembly-CSharp::QuestLine
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  questLineName: Farmer_Jon_Flock
+  quests:
+  - questName: New Quest 1
+    stages:
+    - stageName: Accepting Quest
+      challenges:
+      - challengeName: Click Accept
+        amount: 0
+    - stageName: Object Retrival
+      challenges:
+      - challengeName: Find Sheep Wool
+        amount: 4
+    - stageName: Quest Turn in
+      challenges:
+      - challengeName: Turn in Items
+        amount: 0
