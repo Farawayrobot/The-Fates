@@ -1,3 +1,10 @@
+/// The Fates Narrative Event System
+/// Questline Scriptable Object
+/// 
+/// 08/01/24 User Study System
+/// 02/26/26 The Fates Quest refactor
+/// by Levi Scully
+
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -9,7 +16,6 @@ namespace TheFates
     [CreateAssetMenu(fileName = "NewQuestLine", menuName = "Quests/QuestLine")]
     public class QuestLine : SerializedScriptableObject
     {
-
         [Title("Quest Line Info")] [GUIColor(0.8f, 1f, 0.8f)] // Makes the name field a light green
         public string questLineName;
         
@@ -21,7 +27,6 @@ namespace TheFates
         {
             return new Quest() { questName = "New Quest " + (quests.Count + 1) };
         }
-        
         
         protected override void OnAfterDeserialize()
         {

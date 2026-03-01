@@ -1,6 +1,16 @@
+/// The Fates Narrative Event System
+/// Challenge Object Monobehavior
+///
+/// 08/01/24 User Study System
+/// 02/26/26 The Fates Quest refactor
+/// by Levi Scully
+
+using System.Collections;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using TheFates; // Use your namespace
+using TheFates;
+using Unity.VisualScripting; // Use your namespace
 
 public class ChallengeObject : MonoBehaviour
 {
@@ -35,19 +45,39 @@ public class ChallengeObject : MonoBehaviour
         // Subscribe to the events you wrote!
         data.ChallengeHasStarted += OnChallengeStarted;
         data.ChallengeHasCompleted += OnChallengeCompleted;
+
     }
+    
+    private IEnumerator activeState;
 
     private void OnChallengeStarted(Challenge c)
     {
-        Debug.Log($"GO {name} reacted to Start!");
-        
-        // Play particles, enable a trigger, etc.
+        // 1. Initialize the state machine
+        var logicProvider = data.ParentQuestLine.GetComponent<UnchangingFate>();
+        activeState = logicProvider.TheCrossRoads(c);
+
+        // 2. Trigger the FIRST step (e.g., Play Audio & Start Timer)
+        AdvanceLogic();
+    }
+    
+    public void AdvanceLogic()
+    {
+        if (activeState != null)
+        {
+            // Move to the next block of code until the next 'yield'
+            if (!activeState.MoveNext())
+            {
+                // If MoveNext is false, the function has finished
+                activeState = null;
+                Debug.Log("Challenge Logic Sequence Complete");
+            }
+        }
     }
 
     private void OnChallengeCompleted(Challenge c)
     {
         Debug.Log($"GO {name} reacted to Complete!");
-        // Disable the object, play a sound, etc.
+        AdvanceLogic();        // Disable the object, play a sound, etc.
     }
 
     private void OnDestroy()

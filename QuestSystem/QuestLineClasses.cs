@@ -1,3 +1,11 @@
+/// The Fates Narrative Event System
+/// Quest, stage and challenge c# classes
+/// 
+/// 08/01/24 User Study System
+/// 02/26/26 The Fates Quest refactor
+/// by Levi Scully
+
+
 using System;
 using UnityEngine;
 using Sirenix.OdinInspector; 
@@ -30,14 +38,14 @@ namespace TheFates
         #endregion
         
         #region Link Logic
-        public void Link(Stage s, Quest q, QuestLine ql)
+        public void Link(Stage stage, Quest quest, QuestLine questLine)
         {
-            _parentStage = s;
-            _parentQuest = q;
-            _parentQuestLine = ql;
-            challengeID.x = q.GetQuestID();
-            challengeID.y = s.GetStageID();
-            challengeID.z = s.challenges.FindIndex(x => x.challengeName == challengeName);
+            _parentStage = stage;
+            _parentQuest = quest;
+            _parentQuestLine = questLine;
+            challengeID.x = quest.GetQuestID();
+            challengeID.y = stage.GetStageID();
+            challengeID.z = stage.challenges.FindIndex(x => x.challengeName == challengeName);
         }
         
         
@@ -75,6 +83,8 @@ namespace TheFates
         
         }
 
+        #region  Stage
+
         [Serializable]
         public class Stage {
             [Title("Stage Details", titleAlignment: TitleAlignments.Centered)]
@@ -107,6 +117,10 @@ namespace TheFates
             }
         }
 
+        #endregion
+
+        #region Quest
+        
         [Serializable]
         public class Quest {
             [BoxGroup("$questName", ShowLabel = true)] // The box title updates as you type the name
@@ -130,4 +144,7 @@ namespace TheFates
             }
     
         }
+
+            #endregion
+
 }

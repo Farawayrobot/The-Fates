@@ -1,7 +1,15 @@
+/// The Fates Narrative Event System
+/// FatesKeeper
+/// 
+/// 08/01/24 User Study System
+/// 02/26/26 The Fates Quest refactor
+/// by Levi Scully
+
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEditor.Analytics;
 using UnityEngine;
 
@@ -137,6 +145,20 @@ using UnityEngine;
             
             public void SpawnChallengeObject(Challenge challenge)
             {
+#if UNITY_EDITOR
+                if (challengePrefab == null)
+                {
+                    // Use the GUID or the exact Path
+                    string path = "Assets/TheFates/QuestSystem/Challenge Object.prefab";
+                    challengePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+                    if (challengePrefab == null)
+                    {
+                        Debug.LogError($"Could not find prefab at {path}. Did you move it?");
+                        return;
+                    }
+                }
+#endif
                 // 1. Determine the name of the QuestLine parent
                 // We assume the challenge knows its QuestLine parent name, 
                 // or you can pass it into the function.

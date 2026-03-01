@@ -37,6 +37,9 @@ namespace TheFates
             questLine = challenge.ParentQuestLine;
         }
 
-
+        public virtual IEnumerator TheCrossRoads(Challenge challenge)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
