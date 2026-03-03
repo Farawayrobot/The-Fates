@@ -1,6 +1,13 @@
 /// The Fates Narrative Event System
-/// Quest, stage and challenge c# classes
-/// 
+/// // This script defines several C# classes related to challenges, stages, and quests in the Fates Narrative Event System.
+// The Challenge class represents a specific challenge within a stage, containing information such as name and amount.
+// It also includes logic for linking challenges to their parent stage, quest, and quest line, as well as event handling methods.
+// The Stage class represents a stage within a quest, with a name and a list of challenges.
+// It includes methods for linking stages to their parent quest and quest line, as well as retrieving the stage ID.
+// The Quest class represents a quest within a quest line, with a name and a list of stages.
+// It includes methods for linking quests to their parent quest line and retrieving the quest ID.
+// The script also includes button methods for manual spawning, starting, and completing challenges, as well as event broadcasting.
+
 /// 08/01/24 User Study System
 /// 02/26/26 The Fates Quest refactor
 /// by Levi Scully
@@ -15,16 +22,31 @@ using Unity.Mathematics;
 namespace TheFates
 {
 
+    [Serializable] public enum ChallengeStatus{
+        NotCollected,
+        Started,
+        inProgress,
+        Completed,
+        Abandoned
+    }
+
     [Serializable]
     public class Challenge {
         [HorizontalGroup("Row", Width = 0.7f), HideLabel]
         public string challengeName;
         private int3 challengeID;
-        
+        private ChallengeStatus challengeStatus;
+
         public int3 GetChallengeID() => challengeID;
+
+        public ChallengeStatus ChallengeStatus { get; set; }
             
-        [HorizontalGroup("Row"), LabelWidth(50)]
+        [FoldoutGroup("Challenge Variables")]
         public int amount;
+        [FoldoutGroup("Challenge Variables")]
+        public float timeLimit;
+        [FoldoutGroup("Challenge Variables")]
+        public int rewardAmount;
         
         #region Parent Getters
         [NonSerialized] private Stage _parentStage;

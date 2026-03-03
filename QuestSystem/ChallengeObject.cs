@@ -33,7 +33,9 @@ public class ChallengeObject : MonoBehaviour
         string qName  = data.ParentQuest?.questName ?? "NoQuest";
         string sName  = data.ParentStage?.stageName ?? "NoStage";
         string cDesc  = data.challengeName;
-
+        data.ChallengeStatus = ChallengeStatus.NotCollected;
+            
+            
         // Result: [Main Story] Farmer Jon: Stage 1 | Collect Wool
         this.gameObject.name = $"-- ] {qlName} {qName} : {sName} | {cDesc} [ --";
         SubscribeToChallengeDebugEvents();

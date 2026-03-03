@@ -95,6 +95,7 @@ namespace TheFates
                 "// [SYSTEM ARCHITECTURE]",
                 "// This is the LOGIC LAYER. It orchestrates sequences.",
                 "// It is synced via ID with the DATA LAYER (ScriptableObject assets).",
+                "// UnChangingFate inherits from MonoBehaviour",
                 "//",
                 "// [WARNING: MANUAL OVERWRITE PROTECTION]",
                 "// FatesKeeper will prevent re-weaving if this file exists to protect manual",
