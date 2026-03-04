@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e7055cebb82c1925bb92bc0338334b3, type: 3}
+  m_Name: New NPC
+  m_EditorClassIdentifier: Assembly-CSharp::TheFates.Nona.CharacterSheet
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  Name: New NPC
+  characterIcon: {fileID: 0}
+  characterType: 1
+  healthPoints:
+    name: Health
+    baseValue: 100
+    totalValue: 100
+  manaPoints:
+    name: Mana
+    baseValue: 50
+    totalValue: 50
+  abilities:
+    strength:
+      name: Strength
+      baseValue: 0
+      totalValue: 0
+    dexterity:
+      name: Dexterity
+      baseValue: 0
+      totalValue: 0
+    constitution:
+      name: Constitution
+      baseValue: 0
+      totalValue: 0
+    wisdom:
+      name: Wisdom
+      baseValue: 0
+      totalValue: 0
+    intelligence:
+      name: Intelligence
+      baseValue: 0
+      totalValue: 0
+    charisma:
+      name: Charisma
+      baseValue: 0
+      totalValue: 0
+  equipment: []
+  consumables: []
+  questItems: []
+  typeToAdd: 0
+  selectedItem: {fileID: 0}
