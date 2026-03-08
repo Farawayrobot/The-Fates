@@ -19,7 +19,7 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using Unity.Mathematics;
 
-namespace TheFates.QuestSystem
+namespace TheFates.Nona.QuestSystem
 {
 
     [Serializable] public enum ChallengeStatus{

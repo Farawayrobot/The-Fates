@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEditor;
+using UnityEngine.Serialization;
 
 
 namespace TheFates.Nona
@@ -12,12 +13,22 @@ namespace TheFates.Nona
 
     public class CharacterSheet : SerializedScriptableObject
     {
-        [Title("Character")] [HideLabel] public string Name = "New Hero";
-        [PreviewField(50, ObjectFieldAlignment.Left), HideLabel]
+        // Define the main horizontal split
+        [HorizontalGroup("Split", width: 0.25f)] // This is the Left Column for the Icon
+        [HideLabel, PreviewField(90, ObjectFieldAlignment.Left)]
         public Sprite characterIcon;
 
+        [VerticalGroup("Split/Right")] // This is the Right Column for the Text
+        [BoxGroup("Split/Right/Identity", LabelText = "Character Identity")]
+        [LabelWidth(100)]
+        public string CharacterName = "New NPC";
+
+        [VerticalGroup("Split/Right")]
+        [BoxGroup("Split/Right/Identity")]
+        public CharacterType characterType;
         
-        [SerializeField, ReadOnly] private CharacterType characterType;
+        [SerializeField] public GameObject characterPrefab;
+        
 
         public void SetCharacterType(CharacterType characterType)
         {
@@ -28,8 +39,8 @@ namespace TheFates.Nona
 
         [HideLabel] public Stat manaPoints = new Stat("Mana", 50);
 
-        [FoldoutGroup("Character Stats"), HideLabel, ReadOnly] // Hides the "Abilities" label to keep the UI clean
-        public CharacterAbilities abilities;
+        [FormerlySerializedAs("abilities")] [FoldoutGroup("Character Stats"), HideLabel, ReadOnly] // Hides the "Abilities" label to keep the UI clean
+        public CharacterStats stats;
 
         private void OnEnable()
         {
@@ -43,20 +54,21 @@ namespace TheFates.Nona
         }
         
         
+        public List<CharacterSkill> skills = new List<CharacterSkill>();
         
         #region Inventory
         
         [FoldoutGroup("Inventory"), TabGroup("Inventory/Main", "Equipment")]
         [TableList(AlwaysExpanded = true)]
-        public List<ItemScriptableObject> equipment = new List<ItemScriptableObject>();
+        public List<InventoryItem> equipment = new List<InventoryItem>();
 
         [FoldoutGroup("Inventory") , TabGroup("Inventory/Main", "Consumables")]
         [TableList(AlwaysExpanded = true)]
-        public List<ItemScriptableObject> consumables = new List<ItemScriptableObject>();
+        public List<InventoryItem> consumables = new List<InventoryItem>();
         
         [FoldoutGroup("Inventory"),TabGroup("Inventory/Main", "Quest Items")]
         [TableList(AlwaysExpanded = true)]
-        public List<ItemScriptableObject> questItems = new List<ItemScriptableObject>();
+        public List<InventoryItem> questItems = new List<InventoryItem>();
        
         [PropertySpace(SpaceBefore = 5)]
         [Title("Add Item To Inventory")]
@@ -78,15 +90,38 @@ namespace TheFates.Nona
             switch (typeToAdd)
             {
                 case ItemType.Consumables:
-                    consumables.Add(selectedItem);
+                    foreach (var invItem in consumables)
+                    {
+                        if (invItem.data == selectedItem)
+                        {
+                            invItem.currentStack++;
+                            return;
+                        }
+                    }
+                    consumables.Add(new InventoryItem(selectedItem));
                     break;
 
                 case ItemType.Arms:
-                    equipment.Add(selectedItem);
+                    foreach (var invItem in equipment)
+                    {
+                        if (invItem.data == selectedItem)
+                        {
+                           // return;
+                        }
+                    }
+                    equipment.Add(new InventoryItem(selectedItem));
                     break;
 
                 case ItemType.QuestItems:
-                    questItems.Add(selectedItem);
+                    foreach (var invItem in questItems)
+                    {
+                        if (invItem.data == selectedItem)
+                        {
+                            invItem.currentStack++;
+                            return;
+                        }
+                    }
+                    questItems.Add(new InventoryItem(selectedItem));
                     break;
 
                 default:

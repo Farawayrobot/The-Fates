@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using TheFates.Utilities;
 using UnityEngine;
 
-namespace TheFates.QuestSystem
+namespace TheFates.Nona.QuestSystem
 {
     
     [Serializable]

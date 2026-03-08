@@ -1,88 +1,73 @@
-using System.IO;
 using Sirenix.OdinInspector;
 using UnityEngine;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 namespace TheFates.Nona
 {
-
-    public class CharacterSheetFactory : MonoBehaviour
+    [CreateAssetMenu(fileName = "CharacterFactory", menuName = "The Fates/Factories/Character Factory")]
+    public class CharacterFactory : SerializedScriptableObject
     {
-        [Title("New Character Identity")] [LabelWidth(100)]
-        public string CharacterName = "New Hero";
-        
+        // Define the main horizontal split
+        [HorizontalGroup("Split", width: 0.25f)] // This is the Left Column for the Icon
+        [HideLabel, PreviewField(90, ObjectFieldAlignment.Left)]
+        public Sprite characterIcon;
+
+        [VerticalGroup("Split/Right")] // This is the Right Column for the Text
+        [BoxGroup("Split/Right/Identity", LabelText = "Character Identity")]
+        [LabelWidth(100)]
+        public string CharacterName = "New NPC";
+
+        [VerticalGroup("Split/Right")]
+        [BoxGroup("Split/Right/Identity")]
         public CharacterType characterType;
+       
+        [BoxGroup("Stats", LabelText = "Initial Allotment")]
+        [HideLabel] // This hides the "Character Stats" header so the internal fields breathe
+        public CharacterStats characterStats;
         
-        [Title("Initial Stat Allotment")] [BoxGroup("Stats"), PropertyRange(-2, 8)]
-        public int Strength = 0;
-
-        [BoxGroup("Stats"), PropertyRange(-2, 8)]
-        public int Dexterity = 0;
-
-        [BoxGroup("Stats"), PropertyRange(-2, 8)]
-        public int Constitution = 0;
-
-        [BoxGroup("Stats"), PropertyRange(-2, 8)]
-        public int Intelligence = 0;
-
-        [BoxGroup("Stats"), PropertyRange(-2, 8)]
-        public int Wisdom = 0;
-
-        [BoxGroup("Stats"), PropertyRange(-2, 8)]
-        public int Charisma = 0;
-
         [Button(ButtonSizes.Large), GUIColor(0, 1, 0.5f)]
         public void SpinNewCharacterSheet()
         {
 #if UNITY_EDITOR
-            // 1. Create the Instance
-            CharacterSheet newSheet = ScriptableObject.CreateInstance<CharacterSheet>();
-            newSheet.Name = CharacterName;
-
-            // 2. Set the Stats immediately
-            // This uses the method we built in CharacterStats earlier
-            newSheet.abilities.SetAllAbilities(
-                Strength, Dexterity, Constitution,
-                Wisdom, Intelligence, Charisma
-            );
-
-            newSheet.SetCharacterType(characterType);
-            
-            // 1. Determine destination folder based on your existing Enum
-            // Assuming 'Player' is one of your enum entries
+            // 1. Determine destination folder
             string subFolder = (characterType == CharacterType.Player) ? "Players" : "NPCs";
             string relativePath = $"Assets/TheFates/Nona/Characters/{subFolder}";
             
-            
-            // 3. Handle Folders via AssetDatabase
-            string cleanPath = relativePath.Trim('/', '\\');
-            string[] folders = cleanPath.Split('/');
-            string currentPath = "Assets";
+            // 2. Ensure Folders exist
+            EnsureFolders(relativePath);
 
-            for (int i = 1; i < folders.Length; i++) // Skip "Assets" if it's the first folder
-            {
-                if (!AssetDatabase.IsValidFolder(currentPath + "/" + folders[i]))
-                {
-                    AssetDatabase.CreateFolder(currentPath, folders[i]);
-                }
+            // 3. Create and Populate Instance
+            CharacterSheet newSheet = ScriptableObject.CreateInstance<CharacterSheet>();
+            newSheet.name = CharacterName;
+       
+            newSheet.stats = new CharacterStats(characterStats);
+            newSheet.SetCharacterType(characterType);
+            newSheet.characterIcon = characterIcon;
 
-                currentPath += "/" + folders[i];
-            }
-
-            // 4. Generate File Path
-            string finalPath = $"{currentPath}/{CharacterName}.asset";
-            finalPath = AssetDatabase.GenerateUniqueAssetPath(finalPath);
-
-            // 5. Save and Refresh
+            // 4. Save
+            string finalPath = AssetDatabase.GenerateUniqueAssetPath($"{relativePath}/{CharacterName}.asset");
             AssetDatabase.CreateAsset(newSheet, finalPath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            // // 6. Focus the result
-            // EditorUtility.FocusProjectWindow();
-            // Selection.activeObject = newSheet;
-
             Debug.Log($"<b>Nona:</b> A new thread has been spun for <b>{CharacterName}</b> at {finalPath}");
+#endif
+        }
+
+        private void EnsureFolders(string path)
+        {
+#if UNITY_EDITOR
+            string[] folders = path.Split('/');
+            string currentPath = "Assets";
+            for (int i = 1; i < folders.Length; i++)
+            {
+                if (!AssetDatabase.IsValidFolder(currentPath + "/" + folders[i]))
+                    AssetDatabase.CreateFolder(currentPath, folders[i]);
+                currentPath += "/" + folders[i];
+            }
 #endif
         }
     }

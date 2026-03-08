@@ -1,60 +1,67 @@
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace TheFates.Nona
 {
-    public class ItemFactory : MonoBehaviour
+    [CreateAssetMenu(fileName = "ItemFactory", menuName = "The Fates/Factories/Item Factory")]
+    public class ItemFactory : SerializedScriptableObject
     {
-        [Title("Identity")] [HideLabel]
+        [HorizontalGroup("Top", width: 80)] // Fixed width for the icon slot
+        [HideLabel, PreviewField(75, ObjectFieldAlignment.Left)]
+        [SerializeField] public Sprite itemIcon;
+
+        [VerticalGroup("Top/Right")]
+        [BoxGroup("Top/Right/Identity", LabelText = "Item Identity")]
+        [LabelWidth(120)] // Slightly wider to accommodate longer display names
         [SerializeField] public string ItemDisplayName = "New Item";
+
+        [VerticalGroup("Top/Right")]
+        [BoxGroup("Top/Right/Identity")]
+        [MultiLineProperty(3), HideLabel] // Multi-line is much better for descriptions
         [SerializeField] string ItemDisplayDescription = "New Item Description";
+        [VerticalGroup("Top/Right")]
+        [BoxGroup("Top/Right/Identity")]
         public ItemType type;
+        [VerticalGroup("Top/Right")]
+        [BoxGroup("Top/Right/Identity")]
         public ItemRarity rarity;
         
         [Button(ButtonSizes.Large), GUIColor(0, 1, 0.5f)]
         public void ForgeItem()
         {
 #if UNITY_EDITOR
-            // 1. Determine Folder based on Type
             string folderName = GetFolderForItemType(type);
             string relativePath = $"Assets/TheFates/Nona/Items/{folderName}";
 
-            // 2. Build the folders
             EnsureFolders(relativePath);
 
-            // 3. Create the SO
             ItemScriptableObject newItem = ScriptableObject.CreateInstance<ItemScriptableObject>();
-            newItem.itemName = ItemDisplayName; // This is your string field
+            newItem.itemName = ItemDisplayName;
+            newItem.description = ItemDisplayDescription;
             newItem.type = type;
             newItem.rarity = rarity;
-            
 
-            // 4. Save with a unique name
             string finalPath = AssetDatabase.GenerateUniqueAssetPath($"{relativePath}/{ItemDisplayName}.asset");
             AssetDatabase.CreateAsset(newItem, finalPath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            //Selection.activeObject = newItem;
             Debug.Log($"<b>Nona:</b> Forged <b>{ItemDisplayName}</b> in <b>{folderName}</b>.");
 #endif
         }
 
-        private string GetFolderForItemType(ItemType t)
+        private string GetFolderForItemType(ItemType type)
         {
-            // This maps your Enum values to the specific folder names you want
-            switch (t)
+            switch (type)
             {
-                case ItemType.Arms:
-                    return "Arms";
-                case ItemType.Consumables:
-                    return "Consumables";
-                case ItemType.QuestItems:
-                    return "QuestItems";
-                default:
-                    return "Misc";
+                case ItemType.Arms: return "Arms";
+                case ItemType.Consumables: return "Consumables";
+                case ItemType.QuestItems: return "QuestItems";
+                default: return "Misc";
             }
         }
 
@@ -69,8 +76,7 @@ namespace TheFates.Nona
                     AssetDatabase.CreateFolder(currentPath, folders[i]);
                 currentPath += "/" + folders[i];
             }
-  #endif
+#endif
         }
-        
     }
-}
+} 

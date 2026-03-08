@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TheFates.Nona
 {
@@ -29,17 +30,14 @@ namespace TheFates.Nona
         [BoxGroup("Core Identity"), ShowIf("IsConsumable")]
         public int amount = 1;       
         [BoxGroup("Core Identity"), ShowIf("IsArmRanged")]
-        public int ammo = 1;
-        
-
-        
-        
+        public List<ItemScriptableObject> ammoTypes;
         
         [FoldoutGroup("Core Identity/Item Attributes"), TextArea(5, 12)]
         public string description = "Enter item flavor text here...";
         
+        [FormerlySerializedAs("itemAbilities")]
         [FoldoutGroup("Core Identity/Item Attributes"), HideLabel]
-        [SerializeField] public CharacterAbilities itemAbilities;
+        [SerializeField] public List<CharacterStatsEnum> itemStats;
 
         private bool IsConsumable => type == ItemType.Consumables;
         private bool IsArms => type == ItemType.Arms;
@@ -53,5 +51,5 @@ namespace TheFates.Nona
 
         
     }
-    }
+}
 

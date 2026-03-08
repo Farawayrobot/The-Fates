@@ -12,7 +12,7 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 
-namespace TheFates.QuestSystem
+namespace TheFates.Nona.QuestSystem
 {
     /// <summary>
     /// This class is responsible for generating and managing the code required to simulate quest templates.
@@ -147,7 +147,7 @@ namespace TheFates.QuestSystem
             
             List<string> ClassMagic = new()
             {
-                "\nnamespace TheFates.QuestSystem\n{",
+                "\nnamespace TheFates.Nona.QuestSystem\n{",
                 "      public class " + classname + " : UnchangingFate",
                 "      {\n"
         

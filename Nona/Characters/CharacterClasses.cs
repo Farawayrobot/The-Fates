@@ -49,7 +49,7 @@ namespace TheFates.Nona
             return name;
         }
 
-        [SerializeField, HorizontalGroup("Stat", Width = 0.3f), HideLabel]
+        [SerializeField, HorizontalGroup("Stat", Width = 0.3f), HideLabel, InlineProperty]
         [OnValueChanged("UpdateValue")]
         private int baseValue;
 
@@ -61,6 +61,11 @@ namespace TheFates.Nona
         [ShowInInspector, HorizontalGroup("Stat", Width = 0.3f), HideLabel, ReadOnly]
         [GUIColor(0.7f, 1f, 0.7f)] // Light green to show it's the "Final" value
         public int totalValue;
+
+        public int GetTotalValue()
+        {
+            return totalValue;
+        }
 
         private List<StatModifier> modifiers = new List<StatModifier>();
 
@@ -101,21 +106,32 @@ namespace TheFates.Nona
     }
 
     [System.Serializable]
-    public class CharacterAbilities
+    public enum CharacterStatsEnum
+    {
+        Strength,
+        Dexterity,
+        Constitution,
+        Wisdom,
+        Intelligence,
+        Charisma
+    }
+
+    [System.Serializable]
+    public class CharacterStats
     {
         // 1. Mark as SerializeField so the SO actually saves the data
-        [SerializeField] private Stat strength = new Stat("Strength", 0);
-        [SerializeField] private Stat dexterity = new Stat("Dexterity", 0);
-        [SerializeField] private Stat constitution = new Stat("Constitution", 0);
-        [SerializeField] private Stat wisdom = new Stat("Wisdom", 0);
-        [SerializeField] private Stat intelligence = new Stat("Intelligence", 0);
-        [SerializeField] private Stat charisma = new Stat("Charisma", 0);
+        [SerializeField, HideLabel] private Stat strength = new Stat("Strength", 0);
+        [SerializeField, HideLabel] private Stat dexterity = new Stat("Dexterity", 0);
+        [SerializeField, HideLabel] private Stat constitution = new Stat("Constitution", 0);
+        [SerializeField, HideLabel] private Stat wisdom = new Stat("Wisdom", 0);
+        [SerializeField, HideLabel] private Stat intelligence = new Stat("Intelligence", 0);
+        [SerializeField, HideLabel] private Stat charisma = new Stat("Charisma", 0);
 
         // 2. Use a List that references the actual fields for the Inspector
         // We use [ShowInInspector] because the list itself isn't what we save; we save the fields above.
         [Title("Ability Scores")]
         [ListDrawerSettings(DraggableItems = false, HideAddButton = true, HideRemoveButton = true)]
-        public List<Stat> AllAbilities => new List<Stat> 
+        public List<Stat> AllCharacterStats => new List<Stat> 
         { 
             strength, dexterity, constitution, wisdom, intelligence, charisma 
         };
@@ -131,7 +147,7 @@ namespace TheFates.Nona
         }
 
         // Constructor for deep copying
-        public CharacterAbilities(CharacterAbilities source)
+        public CharacterStats(CharacterStats source)
         {
             if (source == null) return;
             SetAllAbilities(
@@ -144,13 +160,34 @@ namespace TheFates.Nona
             );
         }
 
+        public int GetStatValue(CharacterStatsEnum stat)
+        {
+            switch (stat)
+            {
+                case CharacterStatsEnum.Strength:
+                    return strength.GetTotalValue();
+                case CharacterStatsEnum.Dexterity:
+                    return dexterity.GetTotalValue();
+                case CharacterStatsEnum.Constitution:
+                    return constitution.GetTotalValue();
+                case CharacterStatsEnum.Wisdom:
+                    return wisdom.GetTotalValue();
+                case CharacterStatsEnum.Intelligence:
+                    return intelligence.GetTotalValue();
+                case CharacterStatsEnum.Charisma:
+                    return charisma.GetTotalValue();
+            }
+            return 0;
+        }
+
         // Empty constructor for Unity's initial creation
-        public CharacterAbilities() { }
+        public CharacterStats() { }
     }
-    
-    public class Fibre
+
+    public enum StatusEffectEnum
     {
-        
+        Poison,
+        Stunned,
     }
 
     public class Thread

@@ -12,7 +12,7 @@ using UnityEngine;
 using TheFates;
 using Unity.VisualScripting; // Use your namespace
 
-namespace TheFates.QuestSystem
+namespace TheFates.Nona.QuestSystem
 {
     public class ChallengeObject : MonoBehaviour
     {

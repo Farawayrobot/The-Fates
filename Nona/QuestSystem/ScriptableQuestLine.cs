@@ -16,14 +16,14 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace TheFates.QuestSystem
+namespace TheFates.Nona.QuestSystem
 {
 
 
     [CreateAssetMenu(fileName = "NewQuestLine", menuName = "Quests/QuestLine")]
     public class QuestLine : SerializedScriptableObject
     {
-        [Title("Quest Line Info")] [GUIColor(0.8f, 1f, 0.8f)] // Makes the name field a light green
+        [Title("Quest Line")] [GUIColor(0.8f, 1f, 0.8f)] // Makes the name field a light green
         public string questLineName;
         
         [Space(10)] [ListDrawerSettings(ShowIndexLabels = true, CustomAddFunction = "AddNewQuest")]
